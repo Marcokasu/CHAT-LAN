@@ -62,3 +62,25 @@ class ChatClienteLAN:
         self.colores_asignados[nombre] = color
         self.area_chat.tag_config(f'user_{nombre}', foreground=color, font=("Arial", 11, "bold"))
     return f'user_{nombre}'
+
+
+    def procesar_mensaje(self, mensaje):
+        #Clasifica y muestra cada mensaje segun su tipo.
+        if mensaje.startswith("SYSTEM|"):
+            self.mostrar_mensaje_sistema(mensaje.split("|", 1)[1])
+
+        elif mensaje.startswith("CHAT|"):
+            self.procesar_mensaje_usuario(mensaje.split("|", 1)[1])
+
+        elif mensaje.startswith("HISTORY|"):
+            for msg in mensaje.split("|", 1)[1].split("||"):
+                if msg:
+                    self.procesar_mensaje_usuario(msg)
+
+        elif mensaje.startswith("USERS|"):
+            usuarios = mensaje.split("|", 1)[1].split(",")
+            self.lista_usuarios.delete(0, tk.END)
+            for u in usuarios:
+                if u:
+                    self.lista_usuarios.insert(tk.END, u)
+
