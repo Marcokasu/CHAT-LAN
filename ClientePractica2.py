@@ -2,6 +2,7 @@ import socket
 import threading
 import tkinter as tk
 from tkinter import messagebox
+import random
 
 
 class ChatClienteLAN:
@@ -54,3 +55,10 @@ class ChatClienteLAN:
         except Exception as e:
             messagebox.showerror("Error de Conexión", f"No se pudo conectar al servidor:\n{e}")
 
+    def obtener_color_usuario(self, nombre):
+    #Asigna un color fijo y aleatorio a cada usuario.
+    if nombre not in self.colores_asignados:
+        color = random.choice(self.lista_colores)
+        self.colores_asignados[nombre] = color
+        self.area_chat.tag_config(f'user_{nombre}', foreground=color, font=("Arial", 11, "bold"))
+    return f'user_{nombre}'
