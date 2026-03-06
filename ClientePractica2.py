@@ -1,6 +1,7 @@
 import socket
 import threading
 import tkinter as tk
+from tkinter import messagebox
 
 
 class ChatClienteLAN:
@@ -29,3 +30,27 @@ class ChatClienteLAN:
 
         self.root.protocol("WM_DELETE_WINDOW", self.cerrar_aplicacion)
         self.login_win.protocol("WM_DELETE_WINDOW", self.cerrar_aplicacion)
+    
+    def conectar_servidor(self):
+        ip = self.entry_ip.get().strip()
+        self.nombre_usuario = self.entry_nombre.get().strip()
+
+        if not ip or not self.nombre_usuario:
+            messagebox.showwarning("Error", "Llene todos los campos.")
+            return
+
+        try:
+            self.socket_cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.socket_cliente.connect((ip, 5000))
+            self.socket_cliente.send(self.nombre_usuario.encode('utf-8'))
+
+            self.login_win.destroy()
+            self.construir_interfaz_principal()
+
+            hilo_recepcion = threading.Thread(target=self.recibir_mensajes)
+            hilo_recepcion.daemon = True
+            hilo_recepcion.start()
+
+        except Exception as e:
+            messagebox.showerror("Error de Conexión", f"No se pudo conectar al servidor:\n{e}")
+
