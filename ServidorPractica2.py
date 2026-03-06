@@ -11,3 +11,9 @@ clientes = {}
 historial = [] 
 # Para evitar condiciones de carrera al modificar diccionarios/listas
 lock = threading.Lock()
+
+def actualizar_lista_usuarios():
+    #Envia la lista actualizada de usuarios a todos los clientes.
+    with lock:
+        usuarios = ",".join(clientes.values())
+    transmitir_a_todos(f"USERS|{usuarios}")
