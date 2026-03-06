@@ -17,3 +17,22 @@ def actualizar_lista_usuarios():
     with lock:
         usuarios = ",".join(clientes.values())
     transmitir_a_todos(f"USERS|{usuarios}")
+
+def eliminar_cliente(cliente_socket):
+    #Elimina al cliente y notifica a los demas.
+    with lock:
+        if cliente_socket in clientes:
+            nombre = clientes[cliente_socket]
+            del clientes[cliente_socket]
+            cliente_socket.close()
+
+            notificacion = f"SYSTEM|{nombre} ha salido del chat"
+            print(notificacion)
+            usuarios = ",".join(clientes.values())
+
+            for cliente_sock in list(clientes.keys()):
+                try:
+                    cliente_sock.send((notificacion + "\n").encode('utf-8'))
+                    cliente_sock.send((f"USERS|{usuarios}" + "\n").encode('utf-8'))
+                except:
+                    pass
