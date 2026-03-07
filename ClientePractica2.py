@@ -160,3 +160,50 @@ class ChatClienteLAN:
                 if u:
                     self.lista_usuarios.insert(tk.END, u)
 
+    def procesar_mensaje_usuario(self, contenido):
+        #Muestra el mensaje con el color del usuario.
+        if ": " in contenido:
+            nombre, texto = contenido.split(": ", 1)
+            tag_color = self.obtener_color_usuario(nombre)
+            self.area_chat.config(state=tk.NORMAL)
+            self.area_chat.insert(tk.END, f"{nombre}: ", tag_color)
+            self.area_chat.insert(tk.END, f"{texto}\n", 'texto_blanco')
+            self.area_chat.see(tk.END)
+            self.area_chat.config(state=tk.DISABLED)
+
+    def mostrar_mensaje_sistema(self, texto):
+        #Muestra notificaciones en naranja, EN cursiva  y centradas.
+        self.area_chat.config(state=tk.NORMAL)
+        self.area_chat.insert(tk.END, f"--- {texto} ---\n", 'sistema')
+        self.area_chat.see(tk.END)
+        self.area_chat.config(state=tk.DISABLED)
+
+    def enviar_mensaje(self):
+        #Envia el mensaje al servidor y lo muestra en verde a la derecha.
+        mensaje = self.entry_mensaje.get().strip()
+        if mensaje:
+            try:
+                self.socket_cliente.send(mensaje.encode('utf-8'))
+                self.area_chat.config(state=tk.NORMAL)
+                self.area_chat.insert(tk.END, f"Tú: {mensaje}\n", 'propio')
+                self.area_chat.see(tk.END)
+                self.area_chat.config(state=tk.DISABLED)
+                self.entry_mensaje.delete(0, tk.END)
+            except:
+                messagebox.showerror("Error", "No se pudo enviar el mensaje.")
+
+    def cerrar_aplicacion(self):
+        #Cierra la conexion limpiamente.
+        if self.socket_cliente:
+            try:
+                self.socket_cliente.send("EXIT|".encode('utf-8'))
+                self.socket_cliente.close()
+            except:
+                pass
+        self.root.destroy()
+
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = ChatClienteLAN(root)
+    root.mainloop()
