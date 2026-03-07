@@ -113,6 +113,28 @@ class ChatClienteLAN:
             self.area_chat.tag_config(f'user_{nombre}', foreground=color, font=("Arial", 11, "bold"))
         return f'user_{nombre}'
 
+    def recibir_mensajes(self):
+        #Hilo que escucha al servidor usando un buffer para separar mensajes.
+        buffer = ""
+        while True:
+            try:
+                data = self.socket_cliente.recv(4096).decode('utf-8')
+                if not data:
+                    break
+
+                buffer += data
+
+                # Procesar cada mensaje completo separado por \n
+                while "\n" in buffer:
+                    mensaje, buffer = buffer.split("\n", 1)
+                    mensaje = mensaje.strip()
+                    if not mensaje:
+                        continue
+                    self.root.after(0, self.procesar_mensaje, mensaje)
+
+            except:
+                self.root.after(0, self.mostrar_mensaje_sistema, "Conexión perdida con el servidor.")
+                break
 
     def procesar_mensaje(self, mensaje):
         #Clasifica y muestra cada mensaje segun su tipo.

@@ -28,6 +28,13 @@ def actualizar_lista_usuarios():
         usuarios = ",".join(clientes.values())
     transmitir_a_todos(f"USERS|{usuarios}")
 
+def guardar_en_historial(mensaje):
+    #Guarda el mensaje en el historial con limite de 20.
+    with lock:
+        historial.append(mensaje)
+        if len(historial) > MAX_HISTORIAL:
+            historial.pop(0)
+
 def eliminar_cliente(cliente_socket):
     #Elimina al cliente y notifica a los demas.
     with lock:
