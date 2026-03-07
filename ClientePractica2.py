@@ -10,6 +10,10 @@ class ChatClienteLAN:
         self.root = root
         self.root.withdraw()
 
+        self.socket_cliente = None
+        self.nombre_usuario = ""
+        self.colores_asignados = {}
+        self.lista_colores = ["#FF5733", "#5FFE7C", "#3357FF", "#F333FF", "#33FFF5", "#FFC300", "#FF33A8", "#00FF00", "#FF9900"]
         # --- VENTANA DE LOGIN ---
         self.login_win = tk.Toplevel(self.root)
         self.login_win.title("Conectar al Chat")
