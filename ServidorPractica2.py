@@ -1,6 +1,7 @@
 import socket
 import threading
 
+#VARIABLES GLOBALES
 # Configuración del servidor
 HOST = '0.0.0.0' 
 PORT = 5000

@@ -13,7 +13,7 @@ class ChatClienteLAN:
         self.socket_cliente = None
         self.nombre_usuario = ""
         self.colores_asignados = {}
-        self.lista_colores = ["#FF5733", "#5FFE7C", "#3357FF", "#F333FF", "#33FFF5", "#FFC300", "#FF33A8", "#00FF00", "#FF9900"]
+        self.lista_colores = ["#FF5733", "#5FFE7C", "#3357FF", "#F333FF", "#33FFF5", "#FFC300", "#FF33A8", "#00FF00", "#FF9900", "#9F05CA"]
         # --- VENTANA DE LOGIN ---
         self.login_win = tk.Toplevel(self.root)
         self.login_win.title("Conectar al Chat")
@@ -102,7 +102,7 @@ class ChatClienteLAN:
 
         self.entry_mensaje = tk.Entry(bottom_frame, font=("Arial", 12))
         self.entry_mensaje.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(0, 10))
-        self.entry_mensaje.bind("<Return>", lambda event: self.enviar_mensaje())
+        #self.entry_mensaje.bind("<Return>", lambda event: self.enviar_mensaje())
 
         tk.Button(bottom_frame, text="Enviar", command=self.enviar_mensaje,
                 bg="#2980b9", fg="white", font=("Arial", 10, "bold"), relief="flat").pack(side=tk.RIGHT)
